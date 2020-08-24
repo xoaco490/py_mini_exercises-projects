@@ -39,30 +39,63 @@ async def dog(ctx):
         async with session.get("https://dog.ceo/api/breeds/image/random") as r:
             res = await r.json()
             await ctx.send(res['message'])
+            
 @bot.command()
 async def breed(ctx, *, arg):
     raza = arg
+    raza = raza.lower()
     async with aiohttp.ClientSession() as session:
         async with session.get("https://dog.ceo/api/breed/"+ raza +"/images/random") as r:
             res = await r.json()
-            await ctx.send(res['message'])
+            if res['status'] == "success":
+                await ctx.send(res['message'])
+            else:
+                await ctx.send("upa en algun lugar la cagamo")
+        async with session.get("https://dog.ceo/api/breed/"+ raza +"/list") as r:
+            res = await r.json()
+            if res['status'] == "success":
+                await ctx.send("las sub razas de el "+ raza + " son las siguientes:")
+                await ctx.send(res['message'])
+                await ctx.send("recuerda que puedes buscar las sub razas con el comando =subBreed")
+            else:
+                await ctx.send("definitivamente la cagamos")
+
+
+@bot.command()
+async def subBreed(ctx, *, args):
+    raza = args
+    raza = raza.lower()
+    raza = raza.split()
+    async with aiohttp.ClientSession() as session:
+        async with session.get("https://dog.ceo/api/breed/"+raza[0]+"/"+raza[1]+"/images/random") as r:
+            res = await r.json()
+            if res['status'] == "success":
+                await ctx.send(res['message'])
+            else:
+                await ctx.send("upa en algun lugar la cagamo")
+
+
+            
+            
+
+
 
 @bot.command()
 async def dolar(ctx):
     async with aiohttp.ClientSession() as session:
-        async with session.get("Key de la api") as r:
+        async with session.get("https://free.currconv.com/api/v7/convert?apiKey=ef9cc0aa67bf2c22c9a4&q=USD_ARS&compact=ultra") as r:
             res = await r.json()
             await ctx.send(res['USD_ARS'])
             await ctx.send("y nisiquira es el blue, estamos en el horno")
 
 @bot.event
 async def on_member_join(member):
-    channel = bot.get_channel(123)#ID GENERAL
+    channel = bot.get_channel(672894536309014551)#GENERAL
     await channel.send("Y vos che {0.mention}?".format(member))
     
 @bot.event
 async def on_member_remove(member):
-    channel = bot.get_channel(123)#ID GENERAL
+    channel = bot.get_channel(672894536309014551)#GENERAL
     await channel.send("Pica de aca la concha tuya {0.mention}".format(member))
 
 @bot.event
@@ -131,7 +164,8 @@ async def _8ball(ctx, *, question):
                 "Mi veredicto es no.",
                 "Arma es aquel objeto construido específicamente para el ataque o defensa ... mal podría extenderse ese concepto a objetos que no encuadran en esa categoría sin recaer en una interpretación analógica in malam parte vedada por el principio de legalidad (art. 18, CN).",
                 "Ni en pedo.",
-                "Ojalá."]
+                "Ojalá.",
+                "La fortaleza de tu agravio demuestra la debilidad de tu argumento."]
     await ctx.send(f'Pregunta: {question}\nRespuesta: {random.choice(responses)}')
 
 
@@ -142,7 +176,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    channel = bot.get_channel(123)#ID general
+    channel = bot.get_channel(672894536309014551)
     await channel.send("Que onda larvass")
 
 bot.run(TOKEN)
