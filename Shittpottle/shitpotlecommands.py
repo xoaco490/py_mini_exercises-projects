@@ -83,19 +83,19 @@ async def subBreed(ctx, *, args):
 @bot.command()
 async def dolar(ctx):
     async with aiohttp.ClientSession() as session:
-        async with session.get("https://free.currconv.com/api/v7/convert?apiKey=ef9cc0aa67bf2c22c9a4&q=USD_ARS&compact=ultra") as r:
+        async with session.get("free currconv private api") as r:
             res = await r.json()
             await ctx.send(res['USD_ARS'])
             await ctx.send("y nisiquira es el blue, estamos en el horno")
 
 @bot.event
 async def on_member_join(member):
-    channel = bot.get_channel(672894536309014551)#GENERAL
+    channel = bot.get_channel("General ID")#GENERAL
     await channel.send("Y vos che {0.mention}?".format(member))
     
 @bot.event
 async def on_member_remove(member):
-    channel = bot.get_channel(672894536309014551)#GENERAL
+    channel = bot.get_channel("General ID")#GENERAL
     await channel.send("Pica de aca la concha tuya {0.mention}".format(member))
 
 @bot.event
@@ -176,7 +176,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    channel = bot.get_channel(672894536309014551)
+    channel = bot.get_channel("General ID")
     await channel.send("Que onda larvass")
 
 bot.run(TOKEN)
